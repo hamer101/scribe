@@ -1,27 +1,48 @@
-trait DisplayStrategyInterface {
+import scala.collection.mutable.Set
+
+abstract class DisplayStrategy {
     val limit: Int
     val scrollable: Boolean
     def display: Unit
 }
 
-class LineDisplay(var limit: Int, var scrollable: Boolean) extends DisplayStrategyInterface {
+class LineDisplay(var limit: Int, var scrollable: Boolean) extends DisplayStrategy {
     def display(): Unit = {
         // Some shorthened display logic
     }
 }
-class PageDisplay(var limit: Int, var scrollable: Boolean) extends DisplayStrategyInterface {
+class PageDisplay(var limit: Int, var scrollable: Boolean) extends DisplayStrategy {
     def display(): Unit = {
         // Some extended display logic
     }
 }
 
+class DisplayContext(var aDisplayStrategy: DisplayStrategy) {
+    var subscribers: Set[DisplaySubscriber]
 
-class DisplayContext(var aDisplayStrategy: DisplayStrategyInterface) {
-    def setDisplayStrategy(aDisplayStrategy: DisplayStrategyInterface): Unit = {
+    def setDisplayStrategy(aDisplayStrategy: DisplayStrategy): Unit = {
         this.aDisplayStrategy = aDisplayStrategy
     }
 
-    def display: Unit = {
-        this.aDisplayStrategy.display()
+    def subscribe(subscriber: DisplaySubscriber): {
+        this.subscribers += subscriber
     }
+
+    def unsubscribe(subscriber: DisplaySubscriber): {
+        this.subscribers -= subscriber
+    }
+
+    def displaySubscribers: Unit = {
+        this.subscribers.foreach(subscriber => subscriber.display(this.aDisplayStrategy)))
+    }
+}
+
+trait DisplaySubscriber {
+    var header: String
+    var body: String
+    var footer: String
+    var width: Int
+    var length: Int
+
+    def display(aDisplayStrategy: DisplayStrategy)
 }
