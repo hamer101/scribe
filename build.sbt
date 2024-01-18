@@ -9,5 +9,6 @@ lazy val root = project
     scalaVersion := scala3Version,
 
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test,
-    libraryDependencies += "com.github.nscala-time" %% "nscala-time" % "2.32.0"
+    libraryDependencies += "com.github.nscala-time" %% "nscala-time" % "2.32.0",
+    libraryDependencies += "org.openjfx" % "javafx-controls" % "17.0.1"
   )
